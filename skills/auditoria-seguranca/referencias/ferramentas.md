@@ -79,7 +79,7 @@ npx skills add https://github.com/renat/007 --skill 007 -g -y
 npx skills add https://github.com/anthropics/courses --skill find-bugs -g -y
 npx skills add https://github.com/anthropics/courses --skill brainstorming -g -y
 # esta skill:
-npx skills add https://github.com/<SEU_USUARIO>/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
+npx skills add https://github.com/dmanske/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
 ```
 `-g` = global (vale para todos os projetos); `-y` = sem perguntas.
 

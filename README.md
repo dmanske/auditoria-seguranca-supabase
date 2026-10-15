@@ -38,7 +38,7 @@ prompts/
 
 ### 1. Uso Claude Code
 ```bash
-npx skills add https://github.com/<SEU_USUARIO>/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
+npx skills add https://github.com/dmanske/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
 ```
 Depois, na pasta do seu projeto:
 ```

@@ -51,9 +51,9 @@ Anexe o `GUIA_COMPLETO.md` e use o prompt de `prompts/outras-ias.md`: funciona i
 ## Instalar a skill
 
 ```bash
-npx skills add https://github.com/<SEU_USUARIO>/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
+npx skills add https://github.com/dmanske/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
 # ou à mão:
-git clone https://github.com/<SEU_USUARIO>/auditoria-seguranca-supabase
+git clone https://github.com/dmanske/auditoria-seguranca-supabase
 cp -R auditoria-seguranca-supabase/skills/auditoria-seguranca ~/.claude/skills/
 ```
 
