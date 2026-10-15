@@ -1,0 +1,29 @@
+name: Erro no guia
+description: Comando que não funciona, trecho confuso, informação errada ou desatualizada
+title: "Erro no guia: "
+labels: ["erro no guia"]
+body:
+  - type: input
+    id: onde
+    attributes:
+      label: Onde
+      description: Arquivo e seção (ou o link para a linha).
+      placeholder: "Ex.: GUIA_COMPLETO.md, Parte 3.3"
+    validations:
+      required: true
+  - type: textarea
+    id: problema
+    attributes:
+      label: O que está errado ou confuso
+      description: Se for um comando, cole a mensagem de erro (sem chaves nem dados reais).
+    validations:
+      required: true
+  - type: textarea
+    id: sugestao
+    attributes:
+      label: Como deveria ficar (se souber)
+  - type: input
+    id: ambiente
+    attributes:
+      label: Ambiente (se for comando/script)
+      placeholder: "Ex.: macOS 15, Node 22, Supabase CLI 2.x"

@@ -1,0 +1,61 @@
+name: Falha nova
+description: Sugira um tipo de falha que o guia ainda não cobre
+title: "Falha nova: "
+labels: ["falha nova"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado! **Não publique dados reais** (CPF, telefone, e-mail, nomes, chaves, tokens, IDs de projeto, domínios privados).
+        Se a falha ainda está **aberta** no seu sistema em produção, corrija antes de publicar os detalhes.
+        Falha nos scripts deste repositório? Use Security → Report a vulnerability (relato privado).
+  - type: textarea
+    id: simples
+    attributes:
+      label: Em palavras simples
+      description: Qual é o risco? Explique como explicaria para alguém que não programa.
+      placeholder: "Ex.: qualquer pessoa com o link conseguia ver as fotos de documentos de todos os clientes."
+    validations:
+      required: true
+  - type: textarea
+    id: caso
+    attributes:
+      label: Como aconteceu (sem identificar o projeto)
+      description: Onde estava o problema? Banco (policy, função, view), Edge Function, storage, página pública, front, processo…
+    validations:
+      required: true
+  - type: textarea
+    id: achar
+    attributes:
+      label: Como achar
+      description: A consulta SQL, o comando, o que procurar no código ou no F12 (Rede/Console).
+      render: markdown
+  - type: textarea
+    id: corrigir
+    attributes:
+      label: Como corrigiu (ou como acha que deveria corrigir)
+      render: markdown
+  - type: textarea
+    id: confirmar
+    attributes:
+      label: Como confirmou que fechou
+      description: 'Ex.: passou a dar erro 42501 / 401, a resposta não traz mais o campo, o teste do visitante não lê mais.'
+  - type: textarea
+    id: armadilha
+    attributes:
+      label: Armadilha (opcional)
+      description: Algo que quebrou ou enganou ao corrigir.
+  - type: input
+    id: stack
+    attributes:
+      label: Stack
+      placeholder: "Ex.: Supabase + Next.js na Vercel"
+  - type: checkboxes
+    id: confirmacoes
+    attributes:
+      label: Confirmações
+      options:
+        - label: Não incluí dados reais, chaves, tokens nem identificadores do projeto
+          required: true
+        - label: A falha está corrigida no meu sistema (ou não é de um sistema em produção)
+          required: true

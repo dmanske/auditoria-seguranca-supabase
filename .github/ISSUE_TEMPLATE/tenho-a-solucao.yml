@@ -1,0 +1,72 @@
+name: Tenho a solução
+description: Você sabe como corrigir uma falha (nova ou que já está no guia) ou conhece um jeito melhor
+title: "Solução: "
+labels: ["solução"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ótimo! Descreva a solução do jeito que explicaria para um colega. Código é muito bem-vindo.
+        **Não publique dados reais, chaves, tokens nem identificadores de projeto.**
+        Se preferir, mande direto um pull request com a mudança no guia (veja CONTRIBUTING.md, item 3.2).
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo
+      options:
+        - Solução para uma falha que já está no guia
+        - Jeito melhor (mais simples, mais seguro ou mais barato) de corrigir algo que já está no guia
+        - Falha nova + solução
+        - Adaptação para outra stack (Firebase, Prisma, Next.js, outro banco…)
+    validations:
+      required: true
+  - type: input
+    id: falha
+    attributes:
+      label: Qual falha
+      description: 'O código e o nome no guia (ex.: "A9 — Função SECURITY DEFINER executável por quem não devia"), ou "nova".'
+    validations:
+      required: true
+  - type: textarea
+    id: problema
+    attributes:
+      label: O problema, em uma ou duas frases
+    validations:
+      required: true
+  - type: textarea
+    id: solucao
+    attributes:
+      label: A solução, passo a passo
+      description: 'O que fazer, em ordem. Inclua a ordem de publicação se importar (ex.: banco antes das funções).'
+    validations:
+      required: true
+  - type: textarea
+    id: codigo
+    attributes:
+      label: Código (SQL, TypeScript, configuração…)
+      render: sql
+  - type: textarea
+    id: testar
+    attributes:
+      label: Como testar que funcionou
+      description: 'O teste que prova (ex.: o visitante passa a receber 42501; a resposta não traz mais o campo X).'
+    validations:
+      required: true
+  - type: textarea
+    id: efeitos
+    attributes:
+      label: O que pode quebrar (efeitos colaterais) e como reverter
+  - type: input
+    id: stack
+    attributes:
+      label: Onde você testou
+      placeholder: "Ex.: Supabase + Next.js 15, em produção há 2 meses"
+  - type: checkboxes
+    id: confirmacoes
+    attributes:
+      label: Confirmações
+      options:
+        - label: Não incluí dados reais, chaves, tokens nem identificadores do projeto
+          required: true
+        - label: Testei a solução (ou deixei claro acima que é uma ideia ainda não testada)
+          required: true

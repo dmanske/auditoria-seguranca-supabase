@@ -192,6 +192,18 @@ prompts/
 5. **Prove com evidência**: um `[]` numa tabela vazia não prova proteção.
 6. **Nada muda sem aprovação**, e todo "corrigido" diz o que **não** foi testado.
 
+## Como contribuir
+
+Este guia fica melhor com cada projeto que passa por ele. Você pode:
+- **Contar que rodou** no seu projeto e o que achou (issue "Rodei no meu projeto");
+- **Avisar de um erro** ou comando que não funciona (issue "Erro no guia");
+- **Sugerir uma falha nova** que o guia não cobre (issue "Falha nova");
+- **Explicar uma solução** ou um jeito melhor de corrigir algo (issue "Tenho a solução");
+- **Corrigir ou acrescentar** você mesmo, até pelo site, sem instalar nada (pull request).
+
+Passo a passo para quem nunca usou o GitHub, como achar falhas no seu projeto e as regras (principalmente:
+**nunca publique dados reais nem chaves**): [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Requisitos
 
 - [Supabase CLI](https://supabase.com/docs/guides/cli) (`supabase login` + `supabase link`)

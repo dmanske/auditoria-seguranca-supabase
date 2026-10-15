@@ -1,0 +1,36 @@
+name: Rodei no meu projeto
+description: Conte como foi usar o roteiro no seu projeto (o que achou, o que faltou, o que ajudou)
+title: "Rodei no meu projeto: "
+labels: ["relato de uso"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esses relatos ajudam muito a melhorar o guia. **Não publique dados reais nem identificadores do projeto.**
+  - type: input
+    id: stack
+    attributes:
+      label: Stack
+      placeholder: "Ex.: Supabase + React/Vite na Vercel, 40 tabelas, 12 edge functions"
+  - type: dropdown
+    id: como
+    attributes:
+      label: Como você rodou
+      options:
+        - Claude Code com a skill
+        - Outra IA com o prompt (Cursor, Kiro, ChatGPT, Gemini…)
+        - À mão, seguindo o guia
+        - Só os scripts
+  - type: textarea
+    id: achados
+    attributes:
+      label: O que encontrou (por tipo, sem detalhes sensíveis)
+      placeholder: "Ex.: 3 policies USING(true), 2 funções SECURITY DEFINER abertas, página pública entregando CPF completo…"
+  - type: textarea
+    id: faltou
+    attributes:
+      label: O que faltou ou atrapalhou
+  - type: textarea
+    id: ajudou
+    attributes:
+      label: O que mais ajudou

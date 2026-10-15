@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Falha nos scripts deste repositório (relato privado)
+    url: https://github.com/dmanske/auditoria-seguranca-supabase/security/advisories/new
+    about: Se um script ou instrução deste repositório expõe algo, avise em particular por aqui.
+  - name: Como contribuir (passo a passo)
+    url: https://github.com/dmanske/auditoria-seguranca-supabase/blob/main/CONTRIBUTING.md
+    about: Como achar falhas no seu projeto e contribuir pelo site do GitHub ou pela linha de comando.
