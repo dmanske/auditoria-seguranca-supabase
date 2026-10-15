@@ -1,0 +1,10 @@
+[
+  { "nome": "função de backup sem login", "caminho": "/functions/v1/gerar-backup", "corpo": { "automatico": true }, "esperado": [401, 403] },
+  { "nome": "função de equipe só com a chave pública", "caminho": "/functions/v1/listar-clientes", "corpo": {}, "esperado": [401, 403] },
+  { "nome": "cron sem segredo interno", "caminho": "/functions/v1/enviar-mensagens-agendadas", "corpo": {}, "esperado": [401] },
+  { "nome": "página pública com token falso", "caminho": "/functions/v1/minha-pagina-publica", "corpo": { "token": "tokenfalso123" }, "esperado": [401, 403], "nao_conter": ["cpf", "telefone", "email"] },
+  { "nome": "webhook sem assinatura", "caminho": "/functions/v1/webhook-pagamento", "corpo": { "data": { "id": "123" } }, "esperado": [401, 503] },
+  { "nome": "função do banco fechada para visitante", "caminho": "/rest/v1/rpc/funcao_interna", "corpo": {}, "esperado": [401, 403, 404] },
+  { "nome": "documento por token falso não entrega conteúdo", "caminho": "/rest/v1/rpc/buscar_documento_por_token", "corpo": { "p_token": "00000000-0000-4000-8000-000000000000" }, "esperado": [200, 404], "nao_conter": ["conteudo", "cpf", "assinatura"] },
+  { "nome": "função removida", "caminho": "/functions/v1/funcao-que-saiu", "corpo": {}, "esperado": [404] }
+]
