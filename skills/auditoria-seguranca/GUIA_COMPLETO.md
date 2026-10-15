@@ -20,6 +20,7 @@ páginas públicas para clientes, pagamentos, WhatsApp, contratos, arquivos priv
 6. [Padrões de desenho aprovados](#parte-6--padrões-de-desenho-aprovados)
 7. [Incidentes reais e lições](#parte-7--incidentes-reais-e-lições)
 8. [Checklist final](#parte-8--checklist-final)
+9. [Vazamento pelo navegador: abas Rede, Console e Aplicação (F12)](#parte-9--vazamento-pelo-navegador-abas-rede-console-e-aplicação-f12)
 
 Arquivos de apoio (mesma pasta): `referencias/consultas.sql`, `referencias/padroes-correcao.sql`,
 `referencias/pecas-de-codigo.md`, `referencias/ferramentas.md`, `scripts/`.
@@ -227,7 +228,8 @@ Para cada rota pública, preencha:
 | Token vaza? | `Referrer-Policy`, sem token em log | log grava a URL inteira |
 
 Confirme ao vivo **só com tokens falsos** (`scripts/conferir-endpoints.mjs`). Abra a página com F12 → Rede e
-veja o JSON que chega: é o melhor jeito de ver "o que vai a mais".
+veja o JSON que chega: é o melhor jeito de ver "o que vai a mais". O passo a passo completo (Rede, Console,
+Aplicação, Fontes) e os casos reais estão na **Parte 9**.
 
 ### 3.7 Front
 
@@ -829,3 +831,127 @@ Copie e marque.
 - [ ] `tsc` 0 erros; testes passando
 - [ ] Roteiro de testes manuais atualizado
 - [ ] Varredura independente feita (Claude Security ou equivalente)
+
+---
+
+## Parte 9 — Vazamento pelo navegador: abas Rede, Console e Aplicação (F12)
+
+### Por que isto importa
+
+**Tudo o que chega ao navegador é público para quem está usando a página.** Não importa se a tela mostra ou
+esconde: se o servidor mandou, qualquer pessoa vê apertando F12. "A tela não mostra" **não é proteção**.
+
+Foi assim que confirmamos (e depois provamos o fechamento de) alguns dos vazamentos mais graves: a página
+mostrava só o cartão da pessoa, mas a **resposta** que chegava ao navegador trazia a lista inteira do ônibus, com
+CPF, telefone e data de nascimento de todo mundo.
+
+Este é o teste mais simples e mais revelador do guia. **Qualquer pessoa consegue fazer, sem ser técnica.**
+
+### 9.1 Passo a passo: aba Rede (Network)
+
+1. Abra o Chrome numa **janela anônima** (Ctrl+Shift+N / Cmd+Shift+N), para não usar o seu login de dono.
+2. Abra a página que quer testar (ex.: o link que um cliente recebe).
+3. Aperte **F12** (Mac: Cmd+Option+I) e clique na aba **Rede** (Network).
+4. Marque o filtro **Fetch/XHR** (mostra só as conversas com o servidor) e **recarregue a página** (F5).
+5. Use a página normalmente: digite os dados, clique nos botões. Cada ação aparece como uma linha nova.
+6. Clique em cada linha e abra a aba **Resposta** (Response) ou **Visualização** (Preview). É ali que está **tudo o que o servidor entregou**.
+7. Aperte **Ctrl+F** (Cmd+F) **dentro do painel de Rede** e procure por: `cpf`, `telefone`, `email`, `@`, `nascimento`,
+   `endereco`, `token`, `senha`, `hash`, `valor`, `custo`, `selfie`, `ip`. A busca passa por todas as respostas de uma vez.
+
+**O que procurar e por que é grave:**
+
+| Você vê na resposta | Problema |
+|---|---|
+| Dados de **outras pessoas** (outra linha, outro nome) | vazamento direto: qualquer um com o link vê todos |
+| CPF, telefone, e-mail ou nascimento **completos** que a tela não mostra | a API entrega mais do que a tela precisa |
+| Uma **lista inteira** filtrada no navegador (a busca acontece "na tela") | o filtro tem que ser no servidor; quem lê a resposta vê todos |
+| Valores internos (custo, margem, comissão, dívida de outros) | vazamento de negócio |
+| `id`s internos de outras pessoas | podem virar chave para outras rotas (IDOR) |
+| Tokens, links assinados, `access_token`, caminhos de arquivos privados | dá para reutilizar e abrir o que não devia |
+| O **conteúdo** de um documento antes da pessoa provar quem é | a prova de identidade vira enfeite |
+| Mensagem de erro com detalhe interno (`relation ... does not exist`, stack trace) | mapa do sistema para o atacante |
+
+**Confira também os cabeçalhos (aba Cabeçalhos/Headers da linha):**
+- `Access-Control-Allow-Origin: *` numa resposta com dado pessoal: qualquer site pode ler.
+- Requisições para **outros domínios** (analytics, pixel, chat, fontes). Se a URL da página tem token, ele pode ir junto no `Referer`. A defesa é `Referrer-Policy: strict-origin-when-cross-origin` e não ter rastreadores em páginas com token.
+
+### 9.2 Aba Console
+
+O Console mostra mensagens que o próprio site escreve (`console.log`) e os erros.
+- **Dado sensível impresso:** código de ingresso, token, objeto inteiro do cliente, resposta da API. Tudo que está ali, qualquer um lê. Caso real: o código do ingresso aparecia no console.
+- **Erros com detalhe interno:** nome de tabela, consulta SQL, caminho de arquivo, chave de variável de ambiente.
+- **Avisos de CSP** (`Refused to load...`): mostram o que a política de segurança está bloqueando (bom sinal) ou o que ela deixa passar.
+
+**Correção:** nenhum `console.log` com dado de usuário ou segredo em produção (remova ou use um logger que só
+roda em desenvolvimento); erros genéricos para o usuário e detalhe só no log do **servidor**.
+
+### 9.3 Aba Aplicação (Application)
+
+- **Local Storage / Session Storage:** o Supabase guarda ali a sessão de login (`sb-<projeto>-auth-token`). Isso é
+  normal, mas explica por que **XSS é tão grave**: um script injetado lê esse valor e leva o login da pessoa (Parte 4, D1 e D3).
+  Não guarde ali nada além do necessário (nunca dados de clientes "em cache" de outras pessoas).
+- **Cookies:** sessões em cookie precisam de `HttpOnly`, `Secure` e `SameSite`.
+
+### 9.4 Aba Fontes (Sources): o código do site
+
+O JavaScript do site é **público**. Qualquer pessoa baixa e lê.
+- Procure (Ctrl+Shift+F, busca em todos os arquivos): `service_role`, `sk_live`, `secret`, `apikey`, `token`, `password`,
+  URLs de APIs internas. Caso real: a chave de um servidor de WhatsApp estava no código de uma tela "só para
+  desenvolvedor". Esconder a rota no menu não esconde o código.
+- **Rotas escondidas** (`/dev-mode`, `/admin-teste`): existem no código, então existem para qualquer um. Caso real: uma
+  página permitia trocar a URL e a chave do banco usadas pelo site.
+- **Source maps** (`.map`): se publicados, entregam o código-fonte original com comentários. No Vite, `build.sourcemap`
+  vem desligado; confira se ninguém ligou para produção.
+- A chave **pública** (`anon`) do Supabase aparecer no código é normal; a de serviço, nunca.
+
+### 9.5 A barra de endereço (URL)
+
+Token na URL (`?token=...`) vai para: histórico do navegador, prints, mensagens encaminhadas, logs de servidores e
+do próprio sistema (caso real: o diagnóstico de login gravava a URL inteira numa tabela) e, sem `Referrer-Policy`,
+para sites de terceiros. Por isso o token **sozinho** não pode ser a única barreira (Parte 6.1): link de cliente vence,
+pede prova de identidade e não abre dados de outras pessoas.
+
+### 9.6 Casos reais que encontramos assim
+
+| # | O que aparecia no navegador | Como corrigimos |
+|---|---|---|
+| 1 | A página "minha viagem" baixava a **lista inteira** de passageiros do ônibus (CPF, telefone, nascimento, valores) e filtrava no navegador; digitar uma letra na busca abria o cartão de outra pessoa | Edge function que confere a identidade e devolve **só o cartão da pessoa**; dados de terceiros reduzidos a nome e foto; ids temporários |
+| 2 | A função do link de contrato entregava o **contrato inteiro** (com CPF, assinatura, selfie, IP) antes da pergunta de CPF, mesmo vencido | Resposta pública só com metadados; conteúdo depois do CPF certo e só enquanto válido |
+| 3 | O **preço de custo** do revendedor chegava ao navegador do cliente final (revelava a margem) | O servidor manda só o valor que aquela pessoa paga |
+| 4 | Um link de operador permitia buscar **qualquer cliente**, com telefone e quanto devia | Ação de operador exige login de equipe com permissão |
+| 5 | O **código do ingresso** aparecia no Console | Removido do `console` |
+| 6 | A URL com `?token=` era gravada numa tabela de log | Log grava só `origem + caminho`; registros antigos limpos |
+| 7 | Chave de API de terceiro no código de uma tela "só desenvolvedor" | Código removido; chave trocada |
+| 8 | Erros com `e.message` cru (detalhe interno do banco) | Erro genérico; detalhe só no log do servidor |
+| 9 | Coluna de **custo interno** numa view lida pela página pública | Coluna fora da resposta pública (lista explícita de colunas) |
+| 10 | Caminho de arquivo privado (selfie) e IP completo do signatário na resposta pública | Fora da resposta; arquivo só por link temporário depois da prova |
+
+### 9.7 Como corrigir (padrão geral)
+
+1. **O servidor decide o que cada um recebe.** A resposta tem só o que **aquela tela, para aquela pessoa**, precisa
+   mostrar. Nunca "mande tudo e a tela filtra".
+2. **Filtro e busca no servidor.** O navegador nunca recebe a lista para procurar nela.
+3. **Lista explícita de colunas** em toda consulta de página pública (nada de `select('*')`), de preferência imposta no banco (grant por coluna, Parte 4 A7).
+4. **Mascarar** o que a tela mostra parcialmente (`***.456.789-**`), mascarado **no servidor**.
+5. **Ids temporários** para terceiros; nunca o id real de outra pessoa.
+6. **Erros genéricos** e iguais para "não existe" e "errado" (anti-enumeração).
+7. **Nada de dado no `console`**, nada de segredo no código do site, nada de token em log.
+8. **`Referrer-Policy`**, **`noindex`** e **nenhum rastreador** em páginas com token.
+
+### 9.8 Automatizar (opcional)
+
+- **Com o MCP `rea`** (skill `reverse-engineer-anything`): ele abre a página num navegador controlado, com **token falso**,
+  e captura o tráfego e os cabeçalhos. Bom para conferir várias páginas de uma vez.
+- **Sem IA:** o teste manual acima, com um checklist por página (abaixo). Leva 5 minutos por página.
+- Repita o teste **depois de cada correção** e guarde um print da resposta "antes × depois" no relatório.
+
+### 9.9 Checklist por página
+
+- [ ] Abri em janela anônima, com F12 → Rede → Fetch/XHR
+- [ ] A resposta tem **só** os dados da pessoa (nada de outras pessoas)
+- [ ] Nenhum campo que a tela não mostra (CPF completo, nascimento, custo, ids internos)
+- [ ] Nada de token, caminho privado ou link assinado de outra pessoa
+- [ ] Errar os dados dá a mesma mensagem que um link inexistente
+- [ ] Console sem dados nem erros internos
+- [ ] Nenhuma requisição para terceiros levando a URL com token
+- [ ] Cabeçalhos: sem `Access-Control-Allow-Origin: *`; `X-Robots-Tag: noindex` nas páginas com link

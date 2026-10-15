@@ -21,6 +21,14 @@ Arquivos desta skill:
 - `scripts/`: teste do visitante, conferência de endpoints com tokens falsos, `deno check` em todas as
   funções, busca de segredos.
 
+## Skills e ferramentas complementares
+
+Esta skill funciona sozinha. Se estas estiverem instaladas, use-as junto (detalhes em `referencias/ferramentas.md`):
+`supabase` e `supabase-postgres-best-practices` (antes de escrever migration/policy), `007` (modelagem de ameaças e
+veredito), `find-bugs` e `/security-review` (revisar o diff antes de publicar), plugin Claude Security (varredura
+independente com painel de verificadores), `reverse-engineer-anything` / MCP `rea` (capturar o tráfego de páginas).
+Se faltarem, siga sem elas e sugira ao usuário o instalador `instalar.sh` do repositório da skill.
+
 ## Regras que valem a auditoria inteira
 
 1. **Primeiro só leitura.** Não altere banco, edge function, storage, segredos nem config sem aprovação
@@ -71,7 +79,9 @@ Detalhes de cada fase: `GUIA_COMPLETO.md`, Parte 3.
    assinatura. Rode `scripts/deno-check-todas.sh`.
 6. **Páginas públicas e links com token.** Para cada rota pública: força do token (bits, gerador), validade,
    revogação, limite de tentativas, resposta igual para "não existe"/"errado", o que a API entrega a mais do
-   que a tela mostra, `noindex`, token em log/URL/Referer. Confira com `scripts/conferir-endpoints.mjs` (tokens falsos).
+   que a tela mostra, `noindex`, token em log/URL/Referer. Confira com `scripts/conferir-endpoints.mjs` (tokens falsos)
+   e pelo navegador (F12 → Rede, Console, Aplicação, Fontes): siga `GUIA_COMPLETO.md`, Parte 9, e peça ao usuário
+   para repetir o teste em janela anônima se você não tiver um navegador (com o MCP `rea`, capture o tráfego com token falso).
 7. **Front.** XSS (`dangerouslySetInnerHTML`, `document.write`, `innerHTML`, `<iframe src>`/`<a href>` com
    valor do banco), segredos no bundle (`VITE_`/`NEXT_PUBLIC_` com `service_role`), headers (`vercel.json`:
    CSP, HSTS, X-Frame-Options, Referrer-Policy), `npm audit`.
