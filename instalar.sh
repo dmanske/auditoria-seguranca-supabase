@@ -22,18 +22,21 @@ fi
 echo
 echo "== 2/2 Skills complementares"
 # Supabase (oficiais): guia geral e boas práticas de Postgres/RLS
-npx -y skills add https://github.com/supabase/agent-skills --skill supabase -g -y
-npx -y skills add https://github.com/supabase/agent-skills --skill supabase-postgres-best-practices -g -y
+npx -y skills add https://github.com/supabase/agent-skills --skill supabase -g -y || echo "⚠️  supabase não instalou; siga sem ela ou instale à parte"
+npx -y skills add https://github.com/supabase/agent-skills --skill supabase-postgres-best-practices -g -y || echo "⚠️  supabase-postgres-best-practices não instalou; siga sem ela ou instale à parte"
 # 007: auditoria, modelagem de ameaças (STRIDE/PASTA), veredito de produção, resposta a incidente
-npx -y skills add https://github.com/renat/007 --skill 007 -g -y
+npx -y skills add https://github.com/sickn33/agentic-awesome-skills --skill 007 -g -y || echo "⚠️  007 não instalou; siga sem ela ou instale à parte"
 # find-bugs: revisa o diff da branch atrás de bugs e vulnerabilidades
-npx -y skills add https://github.com/anthropics/courses --skill find-bugs -g -y
+npx -y skills add https://github.com/sickn33/agentic-awesome-skills --skill find-bugs -g -y || echo "⚠️  find-bugs não instalou; siga sem ela ou instale à parte"
 # brainstorming: desenhar correções grandes antes de construir
-npx -y skills add https://github.com/anthropics/courses --skill brainstorming -g -y
+npx -y skills add https://github.com/obra/superpowers --skill brainstorming -g -y || echo "⚠️  brainstorming não instalou; siga sem ela ou instale à parte"
 
 cat <<'TXT'
 
-Pronto. Opcionais (instale à parte, se quiser):
+Pronto. Linhas "✗ … PromptScript does not support global skill installation" são normais: esse
+assistente não aceita instalação global; os outros (Claude Code incluso) receberam as skills.
+
+Opcionais (instale à parte, se quiser):
 - Plugin Claude Security (varredura com painel de 3 verificadores): no Claude Code, digite /plugin e procure
   "Claude Security". Se não aparecer na sua conta, use /security-review (já vem no Claude Code).
 - Skills de teste da coleção comunitária (use SÓ no seu sistema): procure com

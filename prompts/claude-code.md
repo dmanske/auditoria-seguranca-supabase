@@ -61,6 +61,6 @@ Skills complementares (recomendadas):
 ```bash
 npx skills add https://github.com/supabase/agent-skills --skill supabase -g -y
 npx skills add https://github.com/supabase/agent-skills --skill supabase-postgres-best-practices -g -y
-npx skills add https://github.com/renat/007 --skill 007 -g -y
-npx skills add https://github.com/anthropics/courses --skill find-bugs -g -y
+npx skills add https://github.com/sickn33/agentic-awesome-skills --skill 007 -g -y
+npx skills add https://github.com/sickn33/agentic-awesome-skills --skill find-bugs -g -y
 ```

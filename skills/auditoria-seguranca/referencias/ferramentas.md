@@ -75,9 +75,9 @@ assistentes: o formato é uma pasta com um `SKILL.md`.
 # instalador universal de skills (pergunta para qual agente: claude-code, kiro-cli, cursor, gemini...)
 npx skills add https://github.com/supabase/agent-skills --skill supabase -g -y
 npx skills add https://github.com/supabase/agent-skills --skill supabase-postgres-best-practices -g -y
-npx skills add https://github.com/renat/007 --skill 007 -g -y
-npx skills add https://github.com/anthropics/courses --skill find-bugs -g -y
-npx skills add https://github.com/anthropics/courses --skill brainstorming -g -y
+npx skills add https://github.com/sickn33/agentic-awesome-skills --skill 007 -g -y
+npx skills add https://github.com/sickn33/agentic-awesome-skills --skill find-bugs -g -y
+npx skills add https://github.com/obra/superpowers --skill brainstorming -g -y
 # esta skill:
 npx skills add https://github.com/dmanske/auditoria-seguranca-supabase --skill auditoria-seguranca -g -y
 ```

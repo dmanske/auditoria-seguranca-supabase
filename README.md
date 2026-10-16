@@ -100,9 +100,9 @@ Leia o [GUIA_COMPLETO.md](skills/auditoria-seguranca/GUIA_COMPLETO.md) e use os 
 | **auditoria-seguranca** (esta) | Roteiro completo, catálogo de falhas, consultas, correções, scripts | A auditoria inteira | `instalar.sh` ou `npx skills add …` acima |
 | **supabase** | Guia oficial de Supabase com checklist de segurança | Banco, Auth, Storage, Edge Functions | `npx skills add https://github.com/supabase/agent-skills --skill supabase -g -y` |
 | **supabase-postgres-best-practices** | Boas práticas de Postgres (RLS, privilégios, performance) | Antes de escrever migration/policy | `npx skills add https://github.com/supabase/agent-skills --skill supabase-postgres-best-practices -g -y` |
-| **007** | Auditoria, modelagem de ameaças (STRIDE/PASTA), red/blue team, nota por área, veredito "pode ir para produção?" | Visão geral e incidentes | `npx skills add https://github.com/renat/007 --skill 007 -g -y` |
-| **find-bugs** | Revisa o diff da branch atrás de bugs e vulnerabilidades | Antes de publicar | `npx skills add https://github.com/anthropics/courses --skill find-bugs -g -y` |
-| **brainstorming** | Estrutura o desenho antes de construir | Correções grandes | `npx skills add https://github.com/anthropics/courses --skill brainstorming -g -y` |
+| **007** | Auditoria, modelagem de ameaças (STRIDE/PASTA), red/blue team, nota por área, veredito "pode ir para produção?" | Visão geral e incidentes | `npx skills add https://github.com/sickn33/agentic-awesome-skills --skill 007 -g -y` |
+| **find-bugs** | Revisa o diff da branch atrás de bugs e vulnerabilidades | Antes de publicar | `npx skills add https://github.com/sickn33/agentic-awesome-skills --skill find-bugs -g -y` |
+| **brainstorming** | Estrutura o desenho antes de construir | Correções grandes | `npx skills add https://github.com/obra/superpowers --skill brainstorming -g -y` |
 | **Claude Security** (plugin do Claude Code) | Equipe de agentes que varre o código e passa cada achado por 3 verificadores independentes | Varredura independente | No Claude Code: `/plugin` → "Claude Security" |
 | **/security-review** e **/code-review** | Revisão de segurança/bugs do que mudou | Antes de publicar | Já vêm no Claude Code |
 | **reverse-engineer-anything** + MCP **rea** | Engenharia reversa com evidência; captura o tráfego de páginas | Ver o que a página entrega; auditar apps de terceiros | Skill + servidor MCP `rea` |
