@@ -20,6 +20,8 @@ o que a primeira deixou passar).
 | Qualquer coisa de Supabase (RLS, policy, função, storage) | skills **`supabase`** + **`supabase-postgres-best-practices`** | docs oficiais + `referencias/consultas.sql` |
 | Scanner oficial de configuração do Supabase | `supabase db advisors --linked --type security` | painel → **Advisors → Security Advisor** |
 | Testar ataques específicos (IDOR, XSS, injeção, login) | skills de teste da coleção comunitária (abaixo) | **OWASP ZAP**, Burp Community |
+| Pentest por IA que **ataca o alvo de verdade** (em sandbox Docker) | **Strix** (`usestrix/strix`): alvo = **cópia limpa sem `.env`**, `-m quick --max-budget <USD>`, `-n`; LLM via gateway da Lovable. Confira cada achado (a maioria de IDOR é barrada pela RLS = nota de endurecimento) | OWASP ZAP, Burp |
+| Auditoria **ampla multi-domínio** (LLM/prompt-injection, cloud/IaC, supply-chain, cliente, IPC) | skill **`security-audit`** (Cloudflare): harness multiagente com coverage ledger e validação adversarial | — |
 | Segredos no código e no histórico do git | `scripts/procurar-segredos.sh` | **gitleaks**, **trufflehog** |
 | Dependências | `npm audit --omit=dev` | `npm audit`, Dependabot, Snyk |
 | Headers do site | `vercel.json` + revisão | https://securityheaders.com, Mozilla Observatory |

@@ -50,6 +50,24 @@ Se faltarem, siga sem elas e sugira ao usuário o instalador `instalar.sh` do re
    faça commit só dos seus arquivos; confira o número da migration contra a maior existente; rode o
    `--dry-run` e confira que só aparecem as suas.
 
+## Princípios do veredito e da verificação
+
+Valem junto com as regras acima (incorporados da `cloudflare/security-audit-skill`, 27/10/2026). Evitam reportar
+desvio de checklist como se fosse furo:
+
+- **Três veredictos, não só "achei":** cada candidato termina como **confirmado** (rastro completo da entrada até o
+  impacto, com resultado observado e limitado), **a validar** (um fato exato ainda sem resolver, **sem severidade** —
+  nunca vira "grave" sem prova) ou **descartado** (candidato derrubado, guardado com o porquê para não reabrir).
+- **Severidade = probabilidade × impacto**, nunca "fugiu do checklist". Sem impacto demonstrável, não é alto.
+- **Defesa em profundidade é nota de endurecimento, não vulnerabilidade.** Se outra camada já barra o ataque (ex.:
+  RLS + gatilho "mesmo salão" seguram um `update` por id sem filtro de tenant no app), a camada que falta é melhoria,
+  não furo — diga isso com todas as letras no relatório, sem inflar a severidade.
+- **Quem confirma ≠ quem achou.** Todo achado grave é verificado por um olhar/agente diferente do que o levantou
+  (encaixa na orquestração). O verificador tenta **derrubar** o achado, não confirmá-lo.
+- **Cobertura explícita (lacuna ≠ limpo).** Ao fim de cada fase, registre o que foi examinado **e o que ficou de
+  fora**. "Não deu para olhar" nunca vira "está seguro"; um scanner que parou no meio (ex.: estourou o orçamento) é
+  inconclusivo, não um atestado.
+
 ## Roteiro (fases)
 
 Siga a ordem. Ao fim de cada fase, resuma para o usuário o que achou (com evidência) antes de seguir.
